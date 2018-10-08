@@ -1,0 +1,53 @@
+{
+  "name": "npmSeed",
+  "version": "1.0.0",
+  "description": "This is a starter pack for web-development. It contains the live server, ",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kenariosz/npm-seed.git"
+  },
+  "author": "Kenariosz",
+  "license": "MIT",
+  "scripts": {
+    "start": "npm-run-all --parallel dev:watch-css dev:serve",
+    "prestart": "mkdirp builds/development/css && copyfiles -f \"node_modules/bootstrap/dist/js/bootstrap.js\" \"builds/development/js\" && copyfiles -f \"node_modules/bootstrap/dist/js/bootstrap.js.map\" \"builds/development/js\" && copyfiles -f \"node_modules/popper.js/dist/umd/popper.js\" \"builds/development/js\" && copyfiles -f \"node_modules/popper.js/dist/umd/popper.js.map\" \"builds/development/js\" && copyfiles -f \"node_modules/jquery-slim/dist/jquery.slim.min.js\" \"builds/development/js\"",
+    "dev:css-compile": "node-sass --output-style expanded --source-map true --source-map-contents true --precision 6 process/scss/style.scss builds/development/css/style.css && node-sass --output-style expanded --source-map true --source-map-contents true --precision 6 node_modules/bootstrap/scss/bootstrap.scss builds/development/css/bootstrap.css",
+    "dev:css-lint": "stylelint --syntax scss \"process/scss/**/*.scss\"",
+    "dev:css-main": "npm-run-all --parallel dev:css-lint dev:css-compile --sequential dev:css-prefix",
+    "dev:css-prefix": "postcss --config postcss.config.js --replace \"builds/development/css/*.css\" \"!builds/development/css/*.min.css\"",
+    "dev:serve": "live-server builds/development",
+    "dev:watch-css": "nodemon --watch process/scss/ --ext scss --exec \"npm run dev:css-main\"",
+    "build": "npm-run-all prod:*",
+    "prod:copy": "copyfiles -f \"node_modules/jquery-slim/dist/jquery.slim.min.js\" \"builds/production/js\"",
+    "prod:css-compile": "node-sass --output-style compressed process/scss/style.scss builds/production/css/style.css && node-sass --output-style compressed node_modules/bootstrap/scss/bootstrap.scss builds/production/css/bootstrap.css",
+    "prod:html-minify": "html-minifier --collapse-whitespace builds/development/index.html > builds/production/index.html",
+    "prod:img-compress": "imagemin builds/development/images/**/*.* --out-dir=builds/production/images --plugin=jpeg-recompress --plugin=svgo",
+    "prod:js-uglify": "mkdirp builds/production/js && uglifyjs-folder builds/development/js -eo builds/production/js -x \".js\" -p \"**/*.js,!**/*min.js\"",
+    "prod:serve": "live-server builds/production"
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.1.5",
+    "bootstrap": "^4.1.3",
+    "copyfiles": "^2.1.0",
+    "html-minifier": "^3.5.20",
+    "imagemin": "^6.0.0",
+    "imagemin-cli": "^3.0.0",
+    "imagemin-jpeg-recompress": "^5.1.0",
+    "imagemin-svgo": "^7.0.0",
+    "jquery-slim": "^3.0.0",
+    "live-server": "^1.2.0",
+    "mkdirp": "^0.5.1",
+    "node-sass": "^4.9.3",
+    "nodemon": "^1.18.4",
+    "npm-run-all": "^4.1.3",
+    "popper.js": "^1.14.4",
+    "postcss-cli": "^6.0.0",
+    "stylelint": "^9.6.0",
+    "stylelint-config-recommended-scss": "^3.2.0",
+    "stylelint-config-standard": "^18.2.0",
+    "stylelint-order": "^1.0.0",
+    "stylelint-scss": "^3.3.1",
+    "uglifyjs": "^2.4.11",
+    "uglifyjs-folder": "^1.5.1"
+  }
+}
