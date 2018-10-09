@@ -10,6 +10,7 @@ $ npm install
 ```
 
 ## Usage
+
 ### Development
 ```console
 $ npm run start
@@ -22,6 +23,7 @@ node modules.
 - Compile the bootstrap scss and custom scss
 - Run postcss-autoprefixer
 - Run a live server 
+
 ### Production
 ```console
 $ npm run build
